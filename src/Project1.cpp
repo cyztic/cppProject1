@@ -135,7 +135,7 @@ void closeDocument()
 void UserInput()
 {
 	int counter = 1;
-	float digitInput, squared, sum, squaredSum, max = 0, min = 999999;
+	float numberInput, squared, sum, squaredSum, max = 0, min = 999999;
 	string stringInput;
 
 	while(true)
@@ -144,18 +144,18 @@ void UserInput()
 		cin >> 	stringInput;
 		if("done" == stringInput || "DONE" == stringInput)
 		{
-			break;
+			break; //will stop the while loop
 		}
 		else
 		{
 			stringstream cast(stringInput);
-			cast >> digitInput;
-			max = MaxValue(digitInput, max);
-			min = MinValue(digitInput, min);
-			squared = Squaring(digitInput);
+			cast >> numberInput;
+			max = MaxValue(numberInput, max);
+			min = MinValue(numberInput, min);
+			squared = Squaring(numberInput);
 			squaredSum += squared;
-			sum += digitInput;
-			TableData(counter, digitInput, squared,  sum,  squaredSum,  max,  min);
+			sum += numberInput;
+			TableData(counter, numberInput, squared,  sum,  squaredSum,  max,  min);
 			counter++;
 		}
 	}
