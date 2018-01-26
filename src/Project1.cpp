@@ -16,6 +16,8 @@
 #include <string>
 #include <sstream>
 #include <iostream>
+#include <cmath>
+#include<iomanip>
 using namespace std;
 
 //Function prototypes
@@ -25,12 +27,15 @@ void outputHeader();
 void outputOpenTable();
 void outputCloseTable();
 void closeDocument();
-void Footer();
+void Footer(int size, float mean, float var, float sDev);
 void UserInput();
 float MaxValue(float current, float max);
 float MinValue(float current, float min);
 float Squaring(float current);
 void TableData(int counter, float current,float squared, float sum, float squaredSum, float max, float min);
+float Mean(float sum, int size);
+float Variance(float squaredSum, float sum, int size);
+float StandardDeviation(float variance);
 //*****************************************************************************************************************************************************************
 int main()
 {
@@ -39,9 +44,6 @@ int main()
 	outputHeader();
 	outputOpenTable();
 	UserInput();
-	outputCloseTable();
-	Footer();
-	closeDocument();
 
 	return 0;
 }
@@ -113,10 +115,14 @@ void outputCloseTable()
 //RECIEVES: Nothing
 //TASK: Prints the footer of the program
 //RETURNS: Nothing
-void Footer()
+void Footer(int size, float mean, float var, float sDev)
 {
    cout << "<br><br><hr><br>" << endl;
-   cout << "END OF PROGRAM OUTPUT" << endl;
+   cout << "END OF PROGRAM OUTPUT" <<  "<br>" << endl;
+   cout << "sample size is: " << size  <<  "<br>" << endl;
+   cout << "sample mean is: " << mean <<  "<br>" << endl;
+   cout << "sample variance is: " << var <<  "<br>" << endl;
+   cout << "sample standard deviation is: " << sDev <<  "<br>" << endl;
    cout << "<br><hr>" << endl;
 }
 
@@ -135,7 +141,7 @@ void closeDocument()
 void UserInput()
 {
 	int counter = 1;
-	float numberInput, squared, sum, squaredSum, max = 0, min = 999999;
+	float var, mean, sDev,  numberInput, squared, sum, squaredSum, max = 0, min = 999999;
 	string stringInput;
 
 	while(true)
@@ -159,6 +165,13 @@ void UserInput()
 			counter++;
 		}
 	}
+	counter -= 1;
+	mean = Mean(sum, counter);
+	var = Variance(squaredSum, sum, counter);
+	sDev = StandardDeviation(var);
+	outputCloseTable();
+	Footer(counter, mean, var, sDev);
+	closeDocument();
 }
 
 //RECIEVES: the current number the user entered, the current max value
@@ -190,7 +203,7 @@ float MinValue(float current, float min)
 //RETURNS: the current number squared
 float Squaring(float current)
 {
-	current = current * current;
+	current = pow(current,2);
 	return current;
 }
 
@@ -209,4 +222,34 @@ void TableData(int counter, float current,float squared, float sum, float square
 	 cout << "<td>" << min << "</td>" << endl;
 	 cout << "<td>" << max << "</td>" << endl;
 	 cout << "</tr>" << endl;
+}
+
+//RECIEVES: the sum of all numbers entered, the number of digits entered
+//TASK: calculate the mean
+//RETURNS: the mean of all numbers entered by user
+float Mean(float sum, int size)
+{
+	float mean;
+	mean = sum/size;
+	return mean;
+}
+
+//RECIEVES: the sum of all numbers squared, the sum of all numbers entered, the number of digits entered
+//TASK: calculate the variance
+//RETURNS: the variance
+float Variance(float squaredSum, float sum, int size)
+{
+	float variance;
+	variance = (squaredSum - ((sum*sum)/ size)) / (size - 1);
+	return variance;
+}
+
+//RECIEVES: the variance
+//TASK: calculate the standard deviation
+//RETURNS: the standard deviation
+float StandardDeviation(float variance)
+{
+	float sDev;
+	sDev = sqrt (variance);
+	return sDev;
 }
